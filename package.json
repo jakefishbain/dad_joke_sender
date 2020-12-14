@@ -1,0 +1,15 @@
+{
+  "name": "dad_joke_sender",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jakefishbain",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "nodemailer": "^6.4.17"
+  }
+}
