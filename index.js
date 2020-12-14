@@ -1,3 +1,4 @@
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 const axios = require('axios');
 
@@ -7,14 +8,14 @@ const transporter = nodemailer.createTransport({
   secure: true,
   port: 465,
   auth: {
-    user: process.env.user,
-    pass: process.env.password
+    user: process.env.USERNAME,
+    pass: process.env.PASSWORD
   },
 });
 
 const mailOptions = {
   from: 'jake@jakefishbain.com',
-  bcc: process.env.recipients,
+  bcc: process.env.RECIPIENTS,
   subject: 'Dad Joke of the Day 👴🏼'
 };
 
