@@ -1,6 +1,6 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
-const axios = require('axios');
+const fetch = require('node-fetch')
 
 const mysql = require("mysql");
 const dbConfig = require("./db.config.js");
@@ -55,15 +55,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-
-const getJoke = async () => {
-  res = await axios.get('https://icanhazdadjoke.com/', { headers: {'Accept': 'application/json'}});
-  return res.data.joke + "\n\n 🐟";
-}
-
 const sendIt = async () => {
   await getRecipients();
-  console.log('RECIPIENTS:', recipients)
 
   const mailOptions = {
     from: 'jake@jakefishbain.com',
@@ -71,13 +64,29 @@ const sendIt = async () => {
     subject: 'Dad Joke of the Day 👴🏼'
   };
 
-  transporter.sendMail({text: await getJoke(), ...mailOptions}, function(error, info){
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-    }
-  });
+  var requestOptions = {
+    method: 'GET',
+    headers: { Accept: 'application/json'},
+    redirect: 'follow'
+  };
+
+  await fetch("https://icanhazdadjoke.com/", requestOptions)
+  .then(response => response.json())
+  .then(result => {
+    console.log(result)
+    return result.joke
+  })
+  .then(joke => {
+    console.log('JOKE: ', joke)
+    transporter.sendMail({text: joke + '\n\n🐟', ...mailOptions}, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  })
+  .catch(error => console.log('error', error));
 }
 
 sendIt();
